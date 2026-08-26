@@ -106,3 +106,5 @@ Thumbs.db
 
 # Test files
 testsprite_tests/
+
+.vercel

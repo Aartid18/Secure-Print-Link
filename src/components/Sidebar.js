@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAuth } from '../context/AuthContext';
+import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { 
   FaHome, 
   FaPrint, 
@@ -14,7 +15,8 @@ import {
   FaChevronLeft,
   FaChevronRight,
   FaBars,
-  FaTimes
+  FaTimes,
+  FaSignOutAlt
 } from 'react-icons/fa';
 
 const SidebarContainer = styled.aside`
@@ -315,9 +317,24 @@ const UserSection = styled.div`
 `;
 
 const Sidebar = ({ isOpen, onToggle }) => {
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
+  const { signOut } = useClerkAuth();
+  const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      if (signOut) {
+        await signOut();
+      }
+    } catch (err) {
+      console.log('Clerk signOut notice:', err);
+    } finally {
+      logout();
+      navigate('/login', { replace: true });
+    }
+  };
 
   // Check if device is mobile or tablet
   useEffect(() => {
@@ -441,9 +458,24 @@ const Sidebar = ({ isOpen, onToggle }) => {
               {getInitials(currentUser?.name)}
             </div>
             <div className="user-details">
-              <div className="user-name">{currentUser?.name}</div>
-              <div className="user-role">{currentUser?.role}</div>
+              <div className="user-name">{currentUser?.name || 'Administrator'}</div>
+              <div className="user-role">{currentUser?.role || 'Admin'}</div>
             </div>
+            <button 
+              onClick={handleLogout}
+              title="Sign Out"
+              style={{
+                background: 'rgba(239, 68, 68, 0.15)',
+                border: 'none',
+                color: '#ef4444',
+                cursor: 'pointer',
+                padding: '8px',
+                borderRadius: '6px',
+                marginLeft: 'auto'
+              }}
+            >
+              <FaSignOutAlt style={{ fontSize: 14 }} />
+            </button>
           </div>
         </UserSection>
       </SidebarContainer>

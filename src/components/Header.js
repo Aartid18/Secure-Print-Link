@@ -251,12 +251,17 @@ const Header = ({ onMenuToggle }) => {
   const [notifications] = useState(3); // Mock notification count
 
   const handleLogout = async () => {
-    if (signOut) {
-      await signOut();
+    try {
+      if (signOut) {
+        await signOut();
+      }
+    } catch (err) {
+      console.log('Clerk signOut notice:', err);
+    } finally {
+      logout();
+      navigate('/login', { replace: true });
+      setShowDropdown(false);
     }
-    logout();
-    navigate('/login');
-    setShowDropdown(false);
   };
 
   const handleProfile = () => {
