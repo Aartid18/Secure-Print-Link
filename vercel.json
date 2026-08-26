@@ -33,19 +33,6 @@
     {
       "source": "/((?!api/).*)",
       "destination": "/"
-    },
-    {
-      "source": "/(.*)",
-      "destination": {
-        "type": "service",
-        "service": "web"
-      }
     }
-  ],
-  "services": {
-    "web": {
-      "root": ".",
-      "framework": "create-react-app"
-    }
-  }
+  ]
 }
