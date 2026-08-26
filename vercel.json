@@ -1,14 +1,51 @@
 {
   "crons": [
-    { "path": "/api/cron/cleanup", "schedule": "0 * * * *" }
+    {
+      "path": "/api/cron/cleanup",
+      "schedule": "0 0 * * *"
+    }
   ],
   "rewrites": [
-    { "source": "/api/release/:token", "destination": "/api/release?token=:token" },
-    { "source": "/api/jobs/:id/content", "destination": "/api/jobs?id=:id&action=content" },
-    { "source": "/api/jobs/:id/view", "destination": "/api/jobs?id=:id&action=view" },
-    { "source": "/api/jobs/:id/release", "destination": "/api/release?id=:id" },
-    { "source": "/api/jobs/:id", "destination": "/api/jobs?id=:id" },
-    { "source": "/api/:path*", "destination": "/api/:path*" },
-    { "source": "/((?!api/).*)", "destination": "/" }
-  ]
+    {
+      "source": "/api/release/:token",
+      "destination": "/api/release?token=:token"
+    },
+    {
+      "source": "/api/jobs/:id/content",
+      "destination": "/api/jobs?id=:id&action=content"
+    },
+    {
+      "source": "/api/jobs/:id/view",
+      "destination": "/api/jobs?id=:id&action=view"
+    },
+    {
+      "source": "/api/jobs/:id/release",
+      "destination": "/api/release?id=:id"
+    },
+    {
+      "source": "/api/jobs/:id",
+      "destination": "/api/jobs?id=:id"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/"
+    },
+    {
+      "source": "/(.*)",
+      "destination": {
+        "type": "service",
+        "service": "web"
+      }
+    }
+  ],
+  "services": {
+    "web": {
+      "root": ".",
+      "framework": "create-react-app"
+    }
+  }
 }
