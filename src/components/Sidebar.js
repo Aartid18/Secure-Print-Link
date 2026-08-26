@@ -323,17 +323,12 @@ const Sidebar = ({ isOpen, onToggle }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
 
-  const handleLogout = async () => {
-    try {
-      if (signOut) {
-        await signOut();
-      }
-    } catch (err) {
-      console.log('Clerk signOut notice:', err);
-    } finally {
-      logout();
-      navigate('/login', { replace: true });
+  const handleLogout = () => {
+    logout();
+    if (signOut) {
+      signOut().catch(err => console.log('Clerk signOut notice:', err));
     }
+    navigate('/login', { replace: true });
   };
 
   // Check if device is mobile or tablet
